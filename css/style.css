@@ -138,13 +138,10 @@ header {
     width: 400px;
 }
 
-/*.animacao {
+.animacao {
     width: 100%;
     max-width: 500px;
     display: block;
     margin: 0 auto;
-}*/
 
-.animacao{
-    border: 5px solid red !important;
-}
+
