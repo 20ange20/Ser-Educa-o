@@ -6,7 +6,7 @@
 }
 
 body {
-    background: #fccee8;
+    background: #f6cae4;
     color: #333;
 }
 
@@ -128,14 +128,19 @@ h2 {
 
 
 header {
-  text-align: center;
-  padding: 20px;
+    text-align: center;
+    padding: 20px;
 }
 
 .logo {
-  max-width: 100%;
-  height: auto;
-  width: 400px; 
+    max-width: 100%;
+    height: auto;
+    width: 400px;
 }
 
-
+.animacao {
+    width: 100%;
+    max-width: 500px;
+    display: block;
+    margin: 0 auto;
+}
