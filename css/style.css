@@ -111,9 +111,8 @@ footer {
 }
 
 h2 {
-    text-align: left;
-    margin-left: 20px;
-    color: #000000;
+  
+    color: #1800ad;
 }
 
 .lista-pdf {
@@ -145,3 +144,13 @@ header {
     margin: 0 auto;
 }
 
+.titulo {
+  display: flex;
+  align-items: center;
+  gap: 10px; 
+}
+
+.titulo img {
+  width: 30px;
+  height: auto;
+}
