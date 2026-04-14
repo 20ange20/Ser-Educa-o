@@ -222,3 +222,15 @@ header {
   margin-left: 40px;
   margin-top: 10px;
 }
+
+.usuario-logado {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.usuario-logado img {
+  width: 35px;
+  border-radius: 50%;
+}

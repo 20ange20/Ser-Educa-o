@@ -13,7 +13,7 @@
 
 <body>
   <header>
-    <img src="img/logoheader.png" alt="Ser Educação" class="logo">
+     <img src="img/logoheader.png" alt="Ser Educação" class="logo">
   </header>
   <nav>
     <div class="links"><a href="index.html">Início</a>
@@ -21,50 +21,67 @@
 
     </div>
   </nav>
-
-  <section class="comentarios-box">
+<section class="comentarios-box">
 
   <h3>Comentários</h3>
 
-  <!-- BOTÃO LOGIN -->
-  <button onclick="login()" class="btn-login">
+  <!-- LOGIN -->
+  <button onclick="login()" id="btnLogin">
     Entrar com Google
   </button>
 
-  <!-- ÁREA DE COMENTAR -->
-  <div class="novo-comentario">
+  <!-- ÁREA DO USUÁRIO (inicialmente escondida) -->
+  <div id="areaUsuario" style="display:none;">
+
+    <div class="usuario-logado">
+      <img id="userFoto">
+      <span id="userNome"></span>
+    </div>
+
     <textarea id="comentario" placeholder="Escreva um comentário..."></textarea>
-    <button onclick="comentar()" class="btn-enviar">Enviar</button>
+    <button onclick="comentar()">Enviar</button>
+
   </div>
 
-  <!-- LISTA DE COMENTÁRIOS -->
   <div id="lista"></div>
 
 </section>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, collection, addDoc, getDocs, updateDoc, doc, increment } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-const firebaseConfig = {
-   apiKey: "AIzaSyBJZf8Eqq8wiyiUT4YmyTfoOdh9cHrxAP0",
-  authDomain: "ser-educacao-e8001.firebaseapp.com",
-  projectId: "ser-educacao-e8001",
-};
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    usuario = user;
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth();
-const db = getFirestore();
-const provider = new GoogleAuthProvider();
+    document.getElementById("btnLogin").style.display = "none";
+    document.getElementById("areaUsuario").style.display = "block";
 
-let usuario = null;
+    document.getElementById("userNome").innerText = user.displayName;
+    document.getElementById("userFoto").src = user.photoURL;
+  }
+});
 
 // LOGIN
 window.login = async function() {
-  const result = await signInWithPopup(auth, provider);
-  usuario = result.user;
-  alert("Logado como " + usuario.displayName);
+  try {
+    const result = await signInWithPopup(auth, provider);
+    usuario = result.user;
+
+    // esconder botão
+    document.getElementById("btnLogin").style.display = "none";
+
+    // mostrar área do usuário
+    document.getElementById("areaUsuario").style.display = "block";
+
+    // preencher dados
+    document.getElementById("userNome").innerText = usuario.displayName;
+    document.getElementById("userFoto").src = usuario.photoURL;
+
+  } catch (error) {
+    console.error(error);
+    alert(error.message);
+  }
 }
 
 // COMENTAR
