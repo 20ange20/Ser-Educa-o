@@ -161,19 +161,26 @@ header {
 }
 
 /*botao voltar*/
-.topo { display: flex;
+.topo {
+  display: flex;
   align-items: center;
   justify-content: center;
+  gap: 15px;
+}
+
+.titulo {
+  display: flex;
+  align-items: center;
   gap: 10px;
+  margin: 0;
 }
 
 .btn-voltar {
   width: 30px;
   cursor: pointer;
-  transition: 0.3s;
+  transition: 0.2s;
 }
 
 .btn-voltar:hover {
-  transform: scale(1.2); /* aumenta */
-  opacity: 0.8;          /* leve transparência */
+  transform: scale(1.1);
 }
