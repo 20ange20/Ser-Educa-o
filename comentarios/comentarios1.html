@@ -220,8 +220,8 @@ async function carregar() {
         <p>${c.texto}</p>
 <div id="editar-${id}"></div>
         <div class="acoes">
-         <button onclick="like('${id}')" class="btn-like">
-  <span class="icone-like">❤</span>
+         <button onclick="like('${id}')">
+  <img src="../img/iconesc/curtir.png" class="icone">
   ${Array.isArray(c.likes) ? c.likes.length : 0}
 </button>
     `;
@@ -229,8 +229,12 @@ async function carregar() {
     // 👇 MOSTRAR SÓ PRO DONO
     if (usuario && usuario.uid === c.userId) {
       html += `
-        <button onclick="editar('${id}', \`${c.texto}\`)">✏️</button>
-        <button onclick="excluir('${id}')">🗑️</button>
+       <button onclick="editar('${id}', \`${c.texto}\`)">
+  <img src="../img/iconesc/editar.png" class="icone">
+</button>
+        <button onclick="excluir('${id}')">
+  <img src="../img/iconesc/excluir.png" class="icone">
+</button>
       `;
     }
 
