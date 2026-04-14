@@ -46,12 +46,50 @@
   <div id="lista"></div>
 
 </section>
-
 <script type="module">
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
+// 🔥 IMPORTS COMPLETOS
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { 
+  getAuth, 
+  signInWithPopup, 
+  GoogleAuthProvider, 
+  onAuthStateChanged 
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+import { 
+  getFirestore, 
+  collection, 
+  addDoc, 
+  getDocs, 
+  updateDoc, 
+  doc, 
+  increment 
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+
+// 🔑 CONFIG (coloque a sua)
+const firebaseConfig = {
+apiKey: "AIzaSyBJZf8Eqq8wiyiUT4YmyTfoOdh9cHrxAP0",
+  authDomain: "ser-educacao-e8001.firebaseapp.com",
+  projectId: "ser-educacao-e8001",
+};
+
+
+// 🚀 INICIAR FIREBASE
+const app = initializeApp(firebaseConfig);
+const auth = getAuth();
+const db = getFirestore();
+const provider = new GoogleAuthProvider();
+
+let usuario = null;
+
+
+// ✅ DETECTAR USUÁRIO LOGADO
 onAuthStateChanged(auth, (user) => {
   if (user) {
+    console.log("Já logado:", user);
+
     usuario = user;
 
     document.getElementById("btnLogin").style.display = "none";
@@ -62,29 +100,20 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-// LOGIN
+
+// 🔐 LOGIN
 window.login = async function() {
   try {
     const result = await signInWithPopup(auth, provider);
     usuario = result.user;
-
-    // esconder botão
-    document.getElementById("btnLogin").style.display = "none";
-
-    // mostrar área do usuário
-    document.getElementById("areaUsuario").style.display = "block";
-
-    // preencher dados
-    document.getElementById("userNome").innerText = usuario.displayName;
-    document.getElementById("userFoto").src = usuario.photoURL;
-
   } catch (error) {
     console.error(error);
     alert(error.message);
   }
 }
 
-// COMENTAR
+
+// 💬 COMENTAR
 window.comentar = async function() {
   const texto = document.getElementById("comentario").value;
 
@@ -105,16 +134,20 @@ window.comentar = async function() {
   carregar();
 }
 
-// LIKE
+
+// 👍 LIKE
 window.like = async function(id) {
   const ref = doc(db, "comentarios", id);
+
   await updateDoc(ref, {
     likes: increment(1)
   });
+
   carregar();
 }
 
-// RESPONDER
+
+// 💬 RESPONDER
 window.responder = async function(id) {
   const texto = prompt("Responder:");
 
@@ -130,7 +163,8 @@ window.responder = async function(id) {
   carregar();
 }
 
-// CARREGAR
+
+// 🔄 CARREGAR
 async function carregar() {
   const lista = document.getElementById("lista");
   lista.innerHTML = "";
@@ -178,5 +212,6 @@ async function carregar() {
 }
 
 carregar();
+
 </script>
 </body>
