@@ -291,8 +291,12 @@ button {
   margin-top: 5px;
 }
 
-.linkcoment {
+.linkcoment a {
     color:#1800ad
+}
+
+.linkcoment a:hover {
+  color: #12008a;
 }
 
 .btn-enviar {
