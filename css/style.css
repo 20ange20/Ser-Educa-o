@@ -240,12 +240,13 @@ header {
   display: flex;
   align-items: center;
   gap: 10px;
-  background: white;
+  background: #408ffc;
   border: 1px solid #dadce0;
   padding: 8px 12px;
   border-radius: 6px;
   cursor: pointer;
   font-family: 'Poppins', sans-serif;
+  color: white;
   transition: 0.2s;
 }
 

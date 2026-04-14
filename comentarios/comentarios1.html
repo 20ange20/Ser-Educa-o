@@ -50,37 +50,24 @@
   <div id="lista"></div>
 
 </section>
+
 <script type="module">
 
-// 🔥 IMPORTS COMPLETOS
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { 
-  getAuth, 
-  signInWithPopup, 
-  GoogleAuthProvider, 
-  onAuthStateChanged 
+  getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged 
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 import { 
-  getFirestore, 
-  collection, 
-  addDoc, 
-  getDocs, 
-  updateDoc, 
-  doc, 
-  increment 
+  getFirestore, collection, addDoc, getDocs, updateDoc, doc, getDoc, deleteDoc 
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-
-// 🔑 CONFIG (coloque a sua)
 const firebaseConfig = {
-apiKey: "AIzaSyBJZf8Eqq8wiyiUT4YmyTfoOdh9cHrxAP0",
+  apiKey: "AIzaSyBJZf8Eqq8wiyiUT4YmyTfoOdh9cHrxAP0",
   authDomain: "ser-educacao-e8001.firebaseapp.com",
   projectId: "ser-educacao-e8001",
 };
 
-
-// 🚀 INICIAR FIREBASE
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
 const db = getFirestore();
@@ -89,14 +76,12 @@ const provider = new GoogleAuthProvider();
 let usuario = null;
 
 
-// ✅ DETECTAR USUÁRIO LOGADO
+// 🔐 DETECTAR LOGIN
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    console.log("Já logado:", user);
-
     usuario = user;
 
-    document.getElementById("btnLogin").style.display = "none";
+    document.querySelector(".google-btn").style.display = "none";
     document.getElementById("areaUsuario").style.display = "block";
 
     document.getElementById("userNome").innerText = user.displayName;
@@ -105,32 +90,24 @@ onAuthStateChanged(auth, (user) => {
 });
 
 
-// 🔐 LOGIN
+// LOGIN
 window.login = async function() {
-  try {
-    const result = await signInWithPopup(auth, provider);
-    usuario = result.user;
-  } catch (error) {
-    console.error(error);
-    alert(error.message);
-  }
+  await signInWithPopup(auth, provider);
 }
 
 
-// 💬 COMENTAR
+// COMENTAR
 window.comentar = async function() {
   const texto = document.getElementById("comentario").value;
 
-  if (!usuario) {
-    alert("Faça login primeiro!");
-    return;
-  }
+  if (!usuario) return alert("Faça login");
 
   await addDoc(collection(db, "comentarios"), {
     texto,
     nome: usuario.displayName,
     foto: usuario.photoURL,
-    likes: 0,
+    userId: usuario.uid,
+    likes: [],
     data: new Date()
   });
 
@@ -139,23 +116,59 @@ window.comentar = async function() {
 }
 
 
-// 👍 LIKE
+// 👍 LIKE (1 por usuário)
 window.like = async function(id) {
   const ref = doc(db, "comentarios", id);
+  const snap = await getDoc(ref);
+  let dados = snap.data();
 
-  await updateDoc(ref, {
-    likes: increment(1)
+  let likes = dados.likes || [];
+
+  if (likes.includes(usuario.uid)) {
+    likes = likes.filter(uid => uid !== usuario.uid);
+  } else {
+    likes.push(usuario.uid);
+  }
+
+  await updateDoc(ref, { likes });
+  carregar();
+}
+
+
+// ✏️ EDITAR
+window.editar = async function(id) {
+  const novo = prompt("Editar comentário:");
+  if (!novo) return;
+
+  await updateDoc(doc(db, "comentarios", id), {
+    texto: novo
   });
 
   carregar();
 }
 
 
-// 💬 RESPONDER
-window.responder = async function(id) {
-  const texto = prompt("Responder:");
+// 🗑️ EXCLUIR
+window.excluir = async function(id) {
+  if (!confirm("Excluir comentário?")) return;
 
-  if (!texto || !usuario) return;
+  await deleteDoc(doc(db, "comentarios", id));
+  carregar();
+}
+
+
+// 💬 ABRIR RESPOSTA
+window.abrirResposta = function(id) {
+  document.getElementById("resposta-" + id).innerHTML = `
+    <textarea id="resp-${id}"></textarea>
+    <button onclick="enviarResposta('${id}')">Enviar</button>
+  `;
+}
+
+
+// ENVIAR RESPOSTA
+window.enviarResposta = async function(id) {
+  const texto = document.getElementById("resp-" + id).value;
 
   await addDoc(collection(db, "respostas"), {
     comentarioId: id,
@@ -190,10 +203,22 @@ async function carregar() {
         <p>${c.texto}</p>
 
         <div class="acoes">
-          <button onclick="like('${id}')">👍 ${c.likes}</button>
-          <button onclick="responder('${id}')">Responder</button>
+          <button onclick="like('${id}')">👍 ${c.likes ? c.likes.length : 0}</button>
+          <button onclick="abrirResposta('${id}')">Responder</button>
+    `;
+
+    // 👇 MOSTRAR SÓ PRO DONO
+    if (usuario && usuario.uid === c.userId) {
+      html += `
+        <button onclick="editar('${id}')">✏️</button>
+        <button onclick="excluir('${id}')">🗑️</button>
+      `;
+    }
+
+    html += `
         </div>
 
+        <div id="resposta-${id}"></div>
         <div class="respostas">
     `;
 
