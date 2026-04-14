@@ -337,3 +337,9 @@ button {
 #lista {
     background-color: #dadce0;
 }
+
+.comentarios-box {
+  max-width: 800px;
+  margin: auto;
+  padding: 0 15px;
+}
