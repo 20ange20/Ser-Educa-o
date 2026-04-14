@@ -312,3 +312,18 @@ button {
   background-color: #12008a; /* um pouco mais escuro */
   transform: scale(1.05);
 }
+
+.icone {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+
+button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
