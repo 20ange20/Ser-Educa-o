@@ -22,6 +22,26 @@
     </div>
   </nav>
 
+  <section class="comentarios-box">
+
+  <h3>Comentários</h3>
+
+  <!-- BOTÃO LOGIN -->
+  <button onclick="login()" class="btn-login">
+    Entrar com Google
+  </button>
+
+  <!-- ÁREA DE COMENTAR -->
+  <div class="novo-comentario">
+    <textarea id="comentario" placeholder="Escreva um comentário..."></textarea>
+    <button onclick="comentar()" class="btn-enviar">Enviar</button>
+  </div>
+
+  <!-- LISTA DE COMENTÁRIOS -->
+  <div id="lista"></div>
+
+</section>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
