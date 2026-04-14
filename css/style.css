@@ -290,3 +290,25 @@ textarea {
 button {
   margin-top: 5px;
 }
+
+.linkcoment {
+    color:#1800ad
+}
+
+.btn-enviar {
+   color: white;
+  background-color: #1800ad;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  transition: 0.2s;
+
+}
+
+.btn-enviar:hover {
+  background-color: #12008a; /* um pouco mais escuro */
+  transform: scale(1.05);
+}
