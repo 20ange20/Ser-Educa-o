@@ -170,12 +170,12 @@ header {
 /* BOTÃO VOLTAR */
 .btn-voltar {
   align-self: flex-start; /* esquerda */
-  width: 30px;
+  width: 35px;
   margin-bottom: 10px;
   cursor: pointer;
   transition: 0.2s;
    display: block;
-  margin-left: 0;
+  margin-left: 10px;
 }
 
 .btn-voltar:hover {
