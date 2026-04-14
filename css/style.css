@@ -331,3 +331,7 @@ button {
   border: none;
   cursor: pointer;
 }
+
+#lista {
+    background-color: #dadce0;
+}
