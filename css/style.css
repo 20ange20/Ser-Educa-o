@@ -234,3 +234,25 @@ header {
   width: 35px;
   border-radius: 50%;
 }
+
+
+.google-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: white;
+  border: 1px solid #dadce0;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  transition: 0.2s;
+}
+
+.google-btn img {
+  width: 18px;
+}
+
+.google-btn:hover {
+  background: #f7f8f8;
+}
