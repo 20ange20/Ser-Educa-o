@@ -12,11 +12,11 @@
 
 <body>
     <header>
-        <img src="img/logoheader.png" alt="Ser Educação" class="logo">
+        <img src="./img/logoheader.png" alt="Ser Educação" class="logo">
     </header>
     <nav>
-        <a href="index.html">Início</a>
-        <a href="artigos.html">Artigos</a>
+    <a href="../index.html">Início</a>
+<a href="../artigos.html">Artigos</a>
     </nav>
     <br>
     <br>
@@ -119,11 +119,18 @@ window.comentar = async function() {
 
 // 👍 LIKE (1 por usuário)
 window.like = async function(id) {
+  if (!usuario) return alert("Faça login");
+
   const ref = doc(db, "comentarios", id);
   const snap = await getDoc(ref);
   let dados = snap.data();
 
-  let likes = dados.likes || [];
+  let likes = dados.likes;
+
+  // 🔥 Corrigir dados antigos (número → array)
+  if (!Array.isArray(likes)) {
+    likes = [];
+  }
 
   if (likes.includes(usuario.uid)) {
     likes = likes.filter(uid => uid !== usuario.uid);
@@ -135,19 +142,28 @@ window.like = async function(id) {
   carregar();
 }
 
-
 // ✏️ EDITAR
-window.editar = async function(id) {
-  const novo = prompt("Editar comentário:");
-  if (!novo) return;
+window.editar = function(id, textoAtual) {
+  const div = document.getElementById("editar-" + id);
+
+  div.innerHTML = `
+    <textarea id="edit-texto-${id}">${textoAtual}</textarea>
+    <button onclick="salvarEdicao('${id}')">Salvar</button>
+  `;
+}
+
+//funcao salvar
+window.salvarEdicao = async function(id) {
+  const novoTexto = document.getElementById(`edit-texto-${id}`).value;
+
+  if (!novoTexto) return;
 
   await updateDoc(doc(db, "comentarios", id), {
-    texto: novo
+    texto: novoTexto
   });
 
   carregar();
 }
-
 
 // 🗑️ EXCLUIR
 window.excluir = async function(id) {
@@ -202,16 +218,18 @@ async function carregar() {
         </div>
 
         <p>${c.texto}</p>
-
+<div id="editar-${id}"></div>
         <div class="acoes">
-          <button onclick="like('${id}')">👍 ${c.likes ? c.likes.length : 0}</button>
-          <button onclick="abrirResposta('${id}')">Responder</button>
+         <button onclick="like('${id}')" class="btn-like">
+  <span class="icone-like">❤</span>
+  ${Array.isArray(c.likes) ? c.likes.length : 0}
+</button>
     `;
 
     // 👇 MOSTRAR SÓ PRO DONO
     if (usuario && usuario.uid === c.userId) {
       html += `
-        <button onclick="editar('${id}')">✏️</button>
+        <button onclick="editar('${id}', \`${c.texto}\`)">✏️</button>
         <button onclick="excluir('${id}')">🗑️</button>
       `;
     }

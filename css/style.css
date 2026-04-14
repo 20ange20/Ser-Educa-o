@@ -257,3 +257,36 @@ header {
 .google-btn:hover {
   background: #f7f8f8;
 }
+
+.btn-like {
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  color: #555;
+}
+
+.icone-like {
+  display: inline-block;
+  transform: translateY(-1px);
+  color: #1800ad;
+  transition: 0.2s;
+}
+
+.btn-like:hover .icone-like {
+  transform: scale(1.2);
+}
+
+textarea {
+  width: 100%;
+  border-radius: 8px;
+  padding: 8px;
+  margin-top: 5px;
+}
+
+button {
+  margin-top: 5px;
+}
