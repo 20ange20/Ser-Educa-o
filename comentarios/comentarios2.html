@@ -20,8 +20,8 @@
     </nav>
     <br>
     <br>
- <a href="index.html">
-    <img src="img/botoes/voltar.png" alt="Voltar" class="btn-voltar">
+ <a href="../index.html">
+    <img src="../img/botoes/voltar.png" alt="Voltar" class="btn-voltar">
   </a>
   <br>
 
@@ -57,6 +57,7 @@
 </section>
 
 <script type="module">
+const paginaId = "artigo2";
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { 
@@ -96,6 +97,7 @@ onAuthStateChanged(auth, (user) => {
 
 
 // LOGIN
+
 window.login = async function() {
   await signInWithPopup(auth, provider);
 }
@@ -109,6 +111,7 @@ window.comentar = async function() {
 
   await addDoc(collection(db, "comentarios"), {
     texto,
+    paginaId, // 🔥 AQUI
     nome: usuario.displayName,
     foto: usuario.photoURL,
     userId: usuario.uid,
@@ -119,7 +122,6 @@ window.comentar = async function() {
   document.getElementById("comentario").value = "";
   carregar();
 }
-
 
 // 👍 LIKE (1 por usuário)
 window.like = async function(id) {
@@ -193,6 +195,7 @@ window.enviarResposta = async function(id) {
 
   await addDoc(collection(db, "respostas"), {
     comentarioId: id,
+    paginaId, // 🔥 AQUI
     texto,
     nome: usuario.displayName,
     foto: usuario.photoURL
@@ -200,7 +203,6 @@ window.enviarResposta = async function(id) {
 
   carregar();
 }
-
 
 // 🔄 CARREGAR
 async function carregar() {
@@ -210,9 +212,13 @@ async function carregar() {
   const comentarios = await getDocs(collection(db, "comentarios"));
   const respostas = await getDocs(collection(db, "respostas"));
 
-  comentarios.forEach((docSnap) => {
-    const c = docSnap.data();
-    const id = docSnap.id;
+ comentarios.forEach((docSnap) => {
+  const c = docSnap.data();
+  const id = docSnap.id;
+
+  // 🔥 FILTRO POR PÁGINA
+  if (c.paginaId !== paginaId) return;
+
 
     let html = `
       <div class="comentario">
@@ -252,7 +258,7 @@ async function carregar() {
     respostas.forEach((rSnap) => {
       const r = rSnap.data();
 
-      if (r.comentarioId === id) {
+      if (r.comentarioId === id && r.paginaId === paginaId) {
         html += `
           <div class="usuario">
             <img src="${r.foto}">
