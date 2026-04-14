@@ -22,23 +22,124 @@
     </div>
   </nav>
 
-<div id="disqus_thread"></div>
-<script>
-    /**
-    *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-    *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
-    
-    var disqus_config = function () {
-    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
-    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-    };
-    
-    (function() { // DON'T EDIT BELOW THIS LINE
-    var d = document, s = d.createElement('script');
-    s.src = 'https://ser-educacao.disqus.com/embed.js';
-    s.setAttribute('data-timestamp', +new Date());
-    (d.head || d.body).appendChild(s);
-    })();
-</script>
+<<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, collection, addDoc, getDocs, updateDoc, doc, increment } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
+const firebaseConfig = {
+   apiKey: "AIzaSyBJZf8Eqq8wiyiUT4YmyTfoOdh9cHrxAP0",
+  authDomain: "ser-educacao-e8001.firebaseapp.com",
+  projectId: "ser-educacao-e8001",
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth();
+const db = getFirestore();
+const provider = new GoogleAuthProvider();
+
+let usuario = null;
+
+// LOGIN
+window.login = async function() {
+  const result = await signInWithPopup(auth, provider);
+  usuario = result.user;
+  alert("Logado como " + usuario.displayName);
+}
+
+// COMENTAR
+window.comentar = async function() {
+  const texto = document.getElementById("comentario").value;
+
+  if (!usuario) {
+    alert("Faça login primeiro!");
+    return;
+  }
+
+  await addDoc(collection(db, "comentarios"), {
+    texto,
+    nome: usuario.displayName,
+    foto: usuario.photoURL,
+    likes: 0,
+    data: new Date()
+  });
+
+  document.getElementById("comentario").value = "";
+  carregar();
+}
+
+// LIKE
+window.like = async function(id) {
+  const ref = doc(db, "comentarios", id);
+  await updateDoc(ref, {
+    likes: increment(1)
+  });
+  carregar();
+}
+
+// RESPONDER
+window.responder = async function(id) {
+  const texto = prompt("Responder:");
+
+  if (!texto || !usuario) return;
+
+  await addDoc(collection(db, "respostas"), {
+    comentarioId: id,
+    texto,
+    nome: usuario.displayName,
+    foto: usuario.photoURL
+  });
+
+  carregar();
+}
+
+// CARREGAR
+async function carregar() {
+  const lista = document.getElementById("lista");
+  lista.innerHTML = "";
+
+  const comentarios = await getDocs(collection(db, "comentarios"));
+  const respostas = await getDocs(collection(db, "respostas"));
+
+  comentarios.forEach((docSnap) => {
+    const c = docSnap.data();
+    const id = docSnap.id;
+
+    let html = `
+      <div class="comentario">
+        <div class="usuario">
+          <img src="${c.foto}">
+          <strong>${c.nome}</strong>
+        </div>
+
+        <p>${c.texto}</p>
+
+        <div class="acoes">
+          <button onclick="like('${id}')">👍 ${c.likes}</button>
+          <button onclick="responder('${id}')">Responder</button>
+        </div>
+
+        <div class="respostas">
+    `;
+
+    respostas.forEach((rSnap) => {
+      const r = rSnap.data();
+
+      if (r.comentarioId === id) {
+        html += `
+          <div class="usuario">
+            <img src="${r.foto}">
+            <small><b>${r.nome}</b>: ${r.texto}</small>
+          </div>
+        `;
+      }
+    });
+
+    html += `</div></div>`;
+    lista.innerHTML += html;
+  });
+}
+
+carregar();
+</script>
 </body>
