@@ -29,6 +29,24 @@ nav a {
     margin: 0 15px;
     text-decoration: none;
     font-weight: bold;
+      position: relative;
+}
+
+
+
+nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 0;
+  height: 2px;
+  background: #1800ad;
+  transition: 0.3s;
+}
+
+nav a:hover::after {
+  width: 100%;
 }
 
 .container {
