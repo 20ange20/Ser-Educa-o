@@ -343,3 +343,17 @@ button {
   margin: auto;
   padding: 0 15px;
 }
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+.comentarios-box {
+  flex: 1;
+}
