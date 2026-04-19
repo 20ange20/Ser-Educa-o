@@ -16,7 +16,7 @@ header {
     color: rgb(255, 255, 255);
     padding: 20px;
     text-align: center;
-}
+    }
 
 nav {
     background: white;
@@ -133,11 +133,6 @@ h2 {
 }
 
 
-header {
-    text-align: center;
-    padding: 20px;
-}
-
 .logo {
     max-width: 100%;
     height: auto;
@@ -188,13 +183,15 @@ header {
   transform: scale(1.1);
 }
 
-
 /*COMENT´RIOS*/
 .comentarios-box {
   max-width: 600px;
   margin: auto;
   font-family: 'Poppins', sans-serif;
   border-radius: 8px;
+  max-width: 800px;
+  padding: 0 15px;
+  flex: 1;
 }
 
 .novo-comentario textarea {
@@ -204,10 +201,17 @@ header {
 }
 
 .comentario {
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 10px;
-  margin-top: 10px;
+  background: #ffffff;
+  border-radius: 12px; /* mais arredondado */
+  padding: 12px;
+  margin-top: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  border: none; /* remove borda feia */
+  transition: 0.2s;
+}
+
+.comentario:hover {
+  transform: translateY(-2px);
 }
 
 .usuario {
@@ -244,7 +248,6 @@ header {
   width: 35px;
   border-radius: 50%;
 }
-
 
 .google-btn {
   display: flex;
@@ -297,10 +300,6 @@ textarea {
   margin-top: 5px;
 }
 
-button {
-  margin-top: 5px;
-}
-
 .linkcoment a {
     color:#1800ad
 }
@@ -340,17 +339,11 @@ button {
   background: none;
   border: none;
   cursor: pointer;
+  margin-top: 5px;
 }
 
 #lista {
     background-color: white;
-}
-
-.comentarios-box {
-  max-width: 800px;
-  margin: auto;
-  padding: 0 15px;
-  border-radius: 8px;
 }
 
 html, body {
@@ -361,11 +354,6 @@ html, body {
 body {
   display: flex;
   flex-direction: column;
-}
-
-.comentarios-box {
-  flex: 1;
-  border-radius: 8px;
 }
 
 main {
