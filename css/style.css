@@ -341,7 +341,7 @@ button {
 }
 
 #lista {
-    background-color: #dadce0;
+    background-color: white;
 }
 
 .comentarios-box {
@@ -366,4 +366,12 @@ body {
 
 main {
   flex: 1;
+}
+
+.coment-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none; /* tira sublinhado */
+  color: #1800ad;
 }
