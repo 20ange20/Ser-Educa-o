@@ -227,44 +227,44 @@ async function carregar() {
   if (c.paginaId !== paginaId) return;
 
 
-    let html = `
-      <div class="comentario">
-        <div class="usuario">
-          <img src="${c.foto}">
-          <strong>${c.nome}</strong>
-        </div>
+   let html = `
+  <div class="comentario">
 
-        <p>${c.texto}</p>
-<div id="editar-${id}"></div>
+    <div class="usuario">
+      <img src="${c.foto}">
+      <strong>${c.nome}</strong>
+    </div>
 
-        div class="acoes">
-  <button onclick="like('${id}')">
-    <img src="../img/iconesc/curtir.png" class="icone">
-    ${Array.isArray(c.likes) ? c.likes.length : 0}
-  </button>
+    <p>${c.texto}</p>
 
-  <button onclick="abrirResposta('${id}')">
-    <img src="../img/iconesc/responder.png" class="icone">
-  </button>
-  
-         <button onclick="like('${id}')">
-  <img src="../img/iconesc/curtir.png" class="icone">
-  ${Array.isArray(c.likes) ? c.likes.length : 0}
-</button>
-    `;
+    <div id="editar-${id}"></div>
+
+    <div class="acoes">
+
+      <button onclick="like('${id}')">
+        <img src="../img/iconesc/curtir.png" class="icone">
+        ${Array.isArray(c.likes) ? c.likes.length : 0}
+      </button>
+
+      <button onclick="abrirResposta('${id}')">
+        <img src="../img/iconesc/responder.png" class="icone">
+      </button>
+      </div>
+`;
 
     // 👇 MOSTRAR SÓ PRO DONO
     if (usuario && usuario.uid === c.userId) {
-      html += `
-       <button onclick="editar('${id}', \`${c.texto}\`)">
-  <img src="../img/iconesc/editar.png" class="icone">
-</button>
-        <button onclick="excluir('${id}')">
-  <img src="../img/iconesc/excluir.png" class="icone">
-</button>
-      `;
-    }
+  html += `
+    <button onclick="editar('${id}', \`${c.texto}\`)">
+      <img src="../img/iconesc/editar.png" class="icone">
+    </button>
 
+    <button onclick="excluir('${id}')">
+      <img src="../img/iconesc/excluir.png" class="icone">
+    </button>
+  `;
+}
+  
     html += `
         </div>
 
