@@ -191,7 +191,7 @@ window.excluir = async function(id) {
 window.abrirResposta = function(id) {
   document.getElementById("resposta-" + id).innerHTML = `
     <textarea id="resp-${id}"></textarea>
-    <button onclick="enviarResposta('${id}')">Enviar</button>
+    <button class="btn-enviar" onclick="enviarResposta('${id}')">Enviar</button>
   `;
 }
 
