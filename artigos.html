@@ -68,28 +68,30 @@
  async function atualizarContadores() {
   const snap = await getDocs(collection(db, "comentarios"));
 
-  // cria um mapa de contagem
   let contagem = {};
 
   snap.forEach(doc => {
     const c = doc.data();
 
-    if (!contagem[c.paginaId]) {
-      contagem[c.paginaId] = 0;
-    }
+    if (!c.paginaId) return;
 
-    contagem[c.paginaId]++;
+    contagem[c.paginaId] = (contagem[c.paginaId] || 0) + 1;
   });
 
-  // atualiza cada artigo
+  console.log("Contagem:", contagem);
+
   document.querySelectorAll(".coment-info").forEach(el => {
-    const id = el.dataset.id;
+    const id = el.dataset.id?.trim(); // remove espaço
+
     const span = el.querySelector(".contador");
 
-    span.innerText = contagem[id] || 0;
+    if (span) {
+      span.innerText = contagem[id] || 0;
+    }
   });
 }
-atualizarContadores();
+
+window.addEventListener("load", atualizarContadores);
 </script>
 </body>
 
