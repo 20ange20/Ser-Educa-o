@@ -80,7 +80,17 @@ import {
   getAuth 
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-const db = getFirestore();
+
+const firebaseConfig = {
+ apiKey: "AIzaSyBJZf8Eqq8wiyiUT4YmyTfoOdh9cHrxAP0",
+  authDomain: "ser-educacao-e8001.firebaseapp.com",
+  projectId: "ser-educacao-e8001",
+};
+
+const app = initializeApp(firebaseConfig); 
+const db = getFirestore(app); 
+
+
 
  async function atualizarContadores() {
   const snap = await getDocs(collection(db, "comentarios"));
