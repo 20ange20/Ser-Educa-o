@@ -166,7 +166,7 @@ window.editar = function(id, textoAtual) {
 
   div.innerHTML = `
     <textarea id="edit-texto-${id}">${textoAtual}</textarea>
-    <button type="button" onclick="salvarEdicao('${id}')">Salvar</button>
+    <button class="btn-enviar" type="button" onclick="salvarEdicao('${id}')">Salvar</button>
   `;
 }
 
@@ -255,18 +255,16 @@ async function carregar() {
     <div class="acoes">
 
       <button onclick="like('${id}')">
-        <img src="../img/iconesc/curtir.png" class="icone">
-        ${Array.isArray(c.likes) ? c.likes.length : 0}
-      </button>
-<br>
-      <button onclick="abrirResposta('${id}')">
-        <img src="../img/iconesc/responder.png" class="icone">
-      </button>
-      </div>
-`;
+      <img src="../img/iconesc/curtir.png" class="icone">
+      ${Array.isArray(c.likes) ? c.likes.length : 0}
+    </button>
 
+    <button onclick="abrirResposta('${id}')">
+      <img src="../img/iconesc/responder.png" class="icone">
+    </button>
+`;
     // 👇 MOSTRAR SÓ PRO DONO
-    if (usuario && usuario.uid === c.userId) {
+   if (usuario && usuario.uid === c.userId) {
   html += `
     <button onclick="editar('${id}', \`${c.texto}\`)">
       <img src="../img/iconesc/editar.png" class="icone">
@@ -277,7 +275,6 @@ async function carregar() {
     </button>
   `;
 }
-  
     html += `
         </div>
 
