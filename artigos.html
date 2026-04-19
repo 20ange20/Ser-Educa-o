@@ -64,7 +64,7 @@
     <p>© 2026 Angélica</p>
     <p> Transformação pela Educação 📚</p>
   </footer>
-<script>
+<script type:"module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 
 import { 
@@ -80,7 +80,7 @@ import {
   getAuth 
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-
+const db = getFirestore();
 
  async function atualizarContadores() {
   const snap = await getDocs(collection(db, "comentarios"));
