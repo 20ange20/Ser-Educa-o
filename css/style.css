@@ -375,3 +375,9 @@ main {
   text-decoration: none; /* tira sublinhado */
   color: #1800ad;
 }
+
+.icone-coment {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
