@@ -111,13 +111,19 @@ window.login = async function() {
 
 // COMENTAR
 window.comentar = async function() {
-  const texto = document.getElementById("comentario").value;
+  const campo = document.getElementById("comentario");
+  const texto = campo.value.trim(); // 🔥 remove espaços
 
   if (!usuario) return alert("Faça login");
 
+  if (!texto) {
+    alert("Digite um comentário antes de enviar!");
+    return;
+  }
+
   await addDoc(collection(db, "comentarios"), {
     texto,
-    paginaId, // 🔥 AQUI
+    paginaId,
     nome: usuario.displayName,
     foto: usuario.photoURL,
     userId: usuario.uid,
@@ -125,7 +131,7 @@ window.comentar = async function() {
     data: new Date()
   });
 
-  document.getElementById("comentario").value = "";
+  campo.value = "";
   carregar();
 }
 
@@ -198,11 +204,19 @@ window.abrirResposta = function(id) {
 
 // ENVIAR RESPOSTA
 window.enviarResposta = async function(id) {
-  const texto = document.getElementById("resp-" + id).value;
+  const campo = document.getElementById("resp-" + id);
+  const texto = campo.value.trim(); // 🔥 importante
+
+  if (!usuario) return alert("Faça login");
+
+  if (!texto) {
+    alert("Digite uma resposta antes de enviar!");
+    return;
+  }
 
   await addDoc(collection(db, "respostas"), {
     comentarioId: id,
-    paginaId, // 🔥 AQUI
+    paginaId,
     texto,
     nome: usuario.displayName,
     foto: usuario.photoURL
@@ -210,7 +224,6 @@ window.enviarResposta = async function(id) {
 
   carregar();
 }
-
 // 🔄 CARREGAR
 async function carregar() {
   const lista = document.getElementById("lista");
