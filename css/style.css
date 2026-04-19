@@ -346,6 +346,7 @@ button {
 
 #lista {
     background-color: white;
+    border-radius: 12px;
 }
 
 html, body {
