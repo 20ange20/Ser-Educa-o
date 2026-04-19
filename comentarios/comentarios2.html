@@ -60,7 +60,7 @@
     <p> Transformação pela Educação 📚</p>
   </footer>
 <script type="module">
-const paginaId = "artigo2";
+const paginaId = "artigo1";
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { 
@@ -108,13 +108,19 @@ window.login = async function() {
 
 // COMENTAR
 window.comentar = async function() {
-  const texto = document.getElementById("comentario").value;
+  const campo = document.getElementById("comentario");
+  const texto = campo.value.trim(); // 🔥 remove espaços
 
   if (!usuario) return alert("Faça login");
 
+  if (!texto) {
+    alert("Digite um comentário antes de enviar!");
+    return;
+  }
+
   await addDoc(collection(db, "comentarios"), {
     texto,
-    paginaId, // 🔥 AQUI
+    paginaId,
     nome: usuario.displayName,
     foto: usuario.photoURL,
     userId: usuario.uid,
@@ -122,7 +128,7 @@ window.comentar = async function() {
     data: new Date()
   });
 
-  document.getElementById("comentario").value = "";
+  campo.value = "";
   carregar();
 }
 
@@ -157,13 +163,14 @@ window.editar = function(id, textoAtual) {
 
   div.innerHTML = `
     <textarea id="edit-texto-${id}">${textoAtual}</textarea>
-    <button onclick="salvarEdicao('${id}')">Salvar</button>
+    <button type="button" onclick="salvarEdicao('${id}')">Salvar</button>
   `;
 }
 
 //funcao salvar
 window.salvarEdicao = async function(id) {
-  const novoTexto = document.getElementById(`edit-texto-${id}`).value;
+  const campo = document.getElementById(`edit-texto-${id}`);
+  const novoTexto = campo.value.trim();
 
   if (!novoTexto) return;
 
@@ -187,18 +194,26 @@ window.excluir = async function(id) {
 window.abrirResposta = function(id) {
   document.getElementById("resposta-" + id).innerHTML = `
     <textarea id="resp-${id}"></textarea>
-    <button onclick="enviarResposta('${id}')">Enviar</button>
+    <button class="btn-enviar" onclick="enviarResposta('${id}')">Enviar</button>
   `;
 }
 
 
 // ENVIAR RESPOSTA
 window.enviarResposta = async function(id) {
-  const texto = document.getElementById("resp-" + id).value;
+  const campo = document.getElementById("resp-" + id);
+  const texto = campo.value.trim(); // 🔥 importante
+
+  if (!usuario) return alert("Faça login");
+
+  if (!texto) {
+    alert("Digite uma resposta antes de enviar!");
+    return;
+  }
 
   await addDoc(collection(db, "respostas"), {
     comentarioId: id,
-    paginaId, // 🔥 AQUI
+    paginaId,
     texto,
     nome: usuario.displayName,
     foto: usuario.photoURL
@@ -206,7 +221,6 @@ window.enviarResposta = async function(id) {
 
   carregar();
 }
-
 // 🔄 CARREGAR
 async function carregar() {
   const lista = document.getElementById("lista");
@@ -223,34 +237,44 @@ async function carregar() {
   if (c.paginaId !== paginaId) return;
 
 
-    let html = `
-      <div class="comentario">
-        <div class="usuario">
-          <img src="${c.foto}">
-          <strong>${c.nome}</strong>
-        </div>
+   let html = `
+  <div class="comentario">
 
-        <p>${c.texto}</p>
-<div id="editar-${id}"></div>
-        <div class="acoes">
-         <button onclick="like('${id}')">
-  <img src="../img/iconesc/curtir.png" class="icone">
-  ${Array.isArray(c.likes) ? c.likes.length : 0}
-</button>
-    `;
+    <div class="usuario">
+      <img src="${c.foto}">
+      <strong>${c.nome}</strong>
+    </div>
+
+    <p>${c.texto}</p>
+
+    <div id="editar-${id}"></div>
+
+    <div class="acoes">
+
+      <button onclick="like('${id}')">
+        <img src="../img/iconesc/curtir.png" class="icone">
+        ${Array.isArray(c.likes) ? c.likes.length : 0}
+      </button>
+<br>
+      <button onclick="abrirResposta('${id}')">
+        <img src="../img/iconesc/responder.png" class="icone">
+      </button>
+      </div>
+`;
 
     // 👇 MOSTRAR SÓ PRO DONO
     if (usuario && usuario.uid === c.userId) {
-      html += `
-       <button onclick="editar('${id}', \`${c.texto}\`)">
-  <img src="../img/iconesc/editar.png" class="icone">
-</button>
-        <button onclick="excluir('${id}')">
-  <img src="../img/iconesc/excluir.png" class="icone">
-</button>
-      `;
-    }
+  html += `
+    <button onclick="editar('${id}', \`${c.texto}\`)">
+      <img src="../img/iconesc/editar.png" class="icone">
+    </button>
 
+    <button onclick="excluir('${id}')">
+      <img src="../img/iconesc/excluir.png" class="icone">
+    </button>
+  `;
+}
+  
     html += `
         </div>
 
